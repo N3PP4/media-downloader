@@ -1,0 +1,25 @@
+#!/bin/zsh
+
+clear
+
+echo "========================="
+echo "📥 YouTube Downloader"
+echo "========================="
+echo
+
+# クリップボードから取得
+url=$(pbpaste)
+
+# YouTube URLならそのまま使う
+if [[ "$url" == *"youtube.com"* || "$url" == *"youtu.be"* ]]; then
+    echo "📋 クリップボードからURLを検出しました！"
+    echo
+    echo "$url"
+    echo
+else
+    read "url?YouTubeのURLを貼り付けてください > "
+fi
+
+echo
+echo "受け取ったURL:"
+echo "$url"
