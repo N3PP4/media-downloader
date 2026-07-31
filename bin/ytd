@@ -19,7 +19,21 @@ echo
 
 case "$choice" in
     1)
-        read "url?URL > "
+                clipboard=$(pbpaste)
+
+        if [[ "$clipboard" == http* ]]; then
+            echo "📋 URL found in clipboard:"
+            echo
+            echo "$clipboard"
+            echo
+            read "url?Press Enter to use it or paste another URL > "
+
+            if [[ -z "$url" ]]; then
+                url="$clipboard"
+            fi
+        else
+            read "url?URL > "
+        fi
 
         echo
         echo "Downloading..."
