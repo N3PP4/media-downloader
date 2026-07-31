@@ -2,10 +2,72 @@
 
 clear
 
-echo "========================="
-echo "📥 Media Downloader"
-echo "========================="
-echo
+SELECTED_URL=""
+
+show_header() {
+    echo "========================="
+    echo "📥 Media Downloader"
+    echo "========================="
+    echo
+}
+
+get_url() {
+    local clipboard
+    local input_url
+
+    clipboard=$(pbpaste 2>/dev/null)
+
+    if [[ "$clipboard" == http://* || "$clipboard" == https://* ]]; then
+        echo "📋 URL found in clipboard:"
+        echo
+        echo "$clipboard"
+        echo
+        read "input_url?Press Enter to use it or paste another URL > "
+
+        if [[ -z "$input_url" ]]; then
+            input_url="$clipboard"
+        fi
+    else
+        read "input_url?URL > "
+    fi
+
+    SELECTED_URL="$input_url"
+}
+
+download_video() {
+    get_url
+
+    echo
+    echo "🎬 Downloading..."
+
+    yt-dlp \
+        --ignore-config \
+        -f "bv*+ba/b" \
+        --merge-output-format mp4 \
+        --embed-metadata \
+        --no-update \
+        -P "$HOME/Downloads" \
+        "$SELECTED_URL"
+}
+
+download_mp3() {
+    get_url
+
+    echo
+    echo "🎵 Downloading MP3..."
+
+    yt-dlp \
+        --ignore-config \
+        -x \
+        --audio-format mp3 \
+        --audio-quality 0 \
+        --embed-metadata \
+        --no-update \
+        -P "$HOME/Downloads" \
+        "$SELECTED_URL"
+}
+
+show_header
 
 echo "1) Best Quality"
 echo "2) MP3"
@@ -13,50 +75,23 @@ echo "3) Settings"
 echo "0) Exit"
 echo
 
-read "choice?番号を選んでください > "
+read "choice?Select an option > "
 
 echo
 
 case "$choice" in
     1)
-                clipboard=$(pbpaste)
-
-        if [[ "$clipboard" == http* ]]; then
-            echo "📋 URL found in clipboard:"
-            echo
-            echo "$clipboard"
-            echo
-            read "url?Press Enter to use it or paste another URL > "
-
-            if [[ -z "$url" ]]; then
-                url="$clipboard"
-            fi
-        else
-            read "url?URL > "
-        fi
-
-        echo
-        echo "Downloading..."
-        yt-dlp \
-            -f "bv*+ba/b" \
-            --merge-output-format mp4 \
-            --embed-metadata \
-            --no-update \
-            "$url"
+        download_video
         ;;
-
     2)
-        echo "🎵 MP3 mode selected."
+        download_mp3
         ;;
-
     3)
-        echo "⚙️ Settings selected."
+        echo "⚙️ Settings (coming soon)"
         ;;
-
     0)
         echo "👋 Goodbye!"
         ;;
-
     *)
         echo "❌ Invalid selection."
         ;;
