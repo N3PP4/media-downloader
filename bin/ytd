@@ -3,23 +3,47 @@
 clear
 
 echo "========================="
-echo "📥 YouTube Downloader"
+echo "📥 Media Downloader"
 echo "========================="
 echo
 
-# クリップボードから取得
-url=$(pbpaste)
+echo "1) Best Quality"
+echo "2) MP3"
+echo "3) Settings"
+echo "0) Exit"
+echo
 
-# YouTube URLならそのまま使う
-if [[ "$url" == *"youtube.com"* || "$url" == *"youtu.be"* ]]; then
-    echo "📋 クリップボードからURLを検出しました！"
-    echo
-    echo "$url"
-    echo
-else
-    read "url?YouTubeのURLを貼り付けてください > "
-fi
+read "choice?番号を選んでください > "
 
 echo
-echo "受け取ったURL:"
-echo "$url"
+
+case "$choice" in
+    1)
+        read "url?URL > "
+
+        echo
+        echo "Downloading..."
+        yt-dlp \
+            -f "bv*+ba/b" \
+            --merge-output-format mp4 \
+            --embed-metadata \
+            --no-update \
+            "$url"
+        ;;
+
+    2)
+        echo "🎵 MP3 mode selected."
+        ;;
+
+    3)
+        echo "⚙️ Settings selected."
+        ;;
+
+    0)
+        echo "👋 Goodbye!"
+        ;;
+
+    *)
+        echo "❌ Invalid selection."
+        ;;
+esac
