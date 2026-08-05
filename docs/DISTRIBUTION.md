@@ -22,6 +22,10 @@ dist/Media-Downloader-1.2.1-Apple-Silicon.dmg
 dist/Media-Downloader-1.2.1-Intel.dmg
 ```
 
+Each DMG contains the application, an Applications shortcut, and a `Manuals`
+folder with separate Japanese and English first-launch guides. Keep both PDFs
+in every architecture-specific package while the trial build is not notarized.
+
 The current package is ad-hoc signed. This verifies the integrity of the app
 bundle during development, but it is not a Developer ID signature and is not
 notarized. A copy downloaded on another Mac can therefore be blocked by
@@ -40,7 +44,8 @@ Before publishing the download on a website:
 5. Staple the notarization ticket with `stapler`.
 6. Run `spctl`, `codesign`, `stapler validate`, and `hdiutil verify` on the
    final artifact.
-7. Publish the DMG checksum, source code, license, and third-party notices.
+7. Verify that both first-launch manuals are present in the mounted DMG.
+8. Publish the DMG checksum, source code, license, and third-party notices.
 
 ## Supported Macs
 

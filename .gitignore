@@ -2,6 +2,8 @@
 *.save
 .build/
 dist/
+output/
+tmp/
 *.dmg
 __pycache__/
 *.pyc
