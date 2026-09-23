@@ -19,10 +19,10 @@ case "$architecture" in
 esac
 
 app_path="$repo_dir/dist/apps/$architecture/Media Downloader.app"
-dmg_path="$repo_dir/dist/Media-Downloader-1.2.1-$release_label.dmg"
+dmg_path="$repo_dir/dist/Media-Downloader-1.2.2-$release_label.dmg"
 manuals_source_dir="$repo_dir/Resources/Manuals"
-manual_ja="Media-Downloader-はじめにお読みください-v1.2.1.pdf"
-manual_en="Media-Downloader-Getting-Started-v1.2.1.pdf"
+manual_ja="Media-Downloader-はじめにお読みください-v1.2.2.pdf"
+manual_en="Media-Downloader-Getting-Started-v1.2.2.pdf"
 
 if [[ ! -d "$app_path" ]]; then
     "$repo_dir/scripts/build-app.sh" "$architecture"

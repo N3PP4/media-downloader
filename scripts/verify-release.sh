@@ -31,7 +31,7 @@ lipo "$app_path/Contents/Resources/bin/yt-dlp" -verify_arch "$architecture"
 minimum_system=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$app_path/Contents/Info.plist")
 version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app_path/Contents/Info.plist")
 [[ "$minimum_system" == "12.0" ]] || { echo "Unexpected minimum OS: $minimum_system" >&2; exit 1; }
-[[ "$version" == "1.2.1" ]] || { echo "Unexpected version: $version" >&2; exit 1; }
+[[ "$version" == "1.2.2" ]] || { echo "Unexpected version: $version" >&2; exit 1; }
 
 app_minos=$(xcrun vtool -show-build "$app_path/Contents/MacOS/MediaDownloaderApp" | awk '/minos/{print $2; exit}')
 [[ "$app_minos" == "12.0" ]] || { echo "Unexpected executable minimum OS: $app_minos" >&2; exit 1; }
@@ -51,8 +51,8 @@ mounted_app="$mount_point/Media Downloader.app"
 codesign --verify --deep --strict --verbose=2 "$mounted_app"
 
 manuals_dir="$mount_point/Manuals"
-manual_ja="$manuals_dir/Media-Downloader-はじめにお読みください-v1.2.1.pdf"
-manual_en="$manuals_dir/Media-Downloader-Getting-Started-v1.2.1.pdf"
+manual_ja="$manuals_dir/Media-Downloader-はじめにお読みください-v1.2.2.pdf"
+manual_en="$manuals_dir/Media-Downloader-Getting-Started-v1.2.2.pdf"
 [[ -d "$manuals_dir" ]] || { echo "The DMG does not contain the Manuals folder" >&2; exit 1; }
 for manual in "$manual_ja" "$manual_en"; do
     [[ -s "$manual" ]] || { echo "Missing or empty bundled manual: $manual" >&2; exit 1; }
@@ -63,4 +63,4 @@ trap - EXIT
 
 shasum -a 256 "$dmg_path"
 
-echo "Verified Media Downloader 1.2.1 ($architecture) with Japanese and English manuals"
+echo "Verified Media Downloader 1.2.2 ($architecture) with Japanese and English manuals"

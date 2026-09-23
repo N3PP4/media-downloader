@@ -18,8 +18,8 @@ Run:
 The outputs are:
 
 ```text
-dist/Media-Downloader-1.2.1-Apple-Silicon.dmg
-dist/Media-Downloader-1.2.1-Intel.dmg
+dist/Media-Downloader-1.2.2-Apple-Silicon.dmg
+dist/Media-Downloader-1.2.2-Intel.dmg
 ```
 
 Each DMG contains the application, an Applications shortcut, and a `Manuals`
@@ -49,7 +49,7 @@ Before publishing the download on a website:
 
 ## Supported Macs
 
-Version 1.2.1 supports macOS Monterey 12 or later. The app and FFmpeg are built
+Version 1.2.2 supports macOS Monterey 12 or later. The app and FFmpeg are built
 separately for arm64 and x86_64. The pinned upstream yt-dlp macOS executable is
 dual-architecture and is included unchanged because thinning its PyInstaller
 executable would invalidate its embedded archive. On the download page, direct
