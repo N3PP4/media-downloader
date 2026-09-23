@@ -20,6 +20,30 @@ struct TestSuite {
 
 var suite = TestSuite()
 
+let releaseJSON = """
+[
+  {"tag_name":"v1.2.1","draft":false,"prerelease":true},
+  {"tag_name":"v1.2.3","draft":true,"prerelease":false},
+  {"tag_name":"v1.2.2","draft":false,"prerelease":true},
+  {"tag_name":"nightly","draft":false,"prerelease":true}
+]
+""".data(using: .utf8)!
+do {
+    let release = try ReleaseCatalog.newestRelease(in: releaseJSON)
+    suite.expect(release?.version == "1.2.2", "The newest published release, including trial releases, should be selected")
+    suite.expect(
+        release?.url.absoluteString == "https://github.com/N3PP4/media-downloader/releases/tag/v1.2.2",
+        "Update link should point to the selected GitHub release"
+    )
+    if let release {
+        suite.expect(ReleaseCatalog.isNewer(release, than: "1.2.1"), "An older installed app should offer the update")
+        suite.expect(!ReleaseCatalog.isNewer(release, than: "1.2.2"), "The current version should be up to date")
+        suite.expect(!ReleaseCatalog.isNewer(release, than: "1.2.10"), "Version comparison should be numeric")
+    }
+} catch {
+    suite.expect(false, "Release JSON parsing failed: \(error)")
+}
+
 do {
     let httpsURL = try URLValidator.validate("https://example.com/video").get()
     let trimmedURL = try URLValidator.validate(" http://example.com/a \n").get()

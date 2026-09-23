@@ -7,11 +7,11 @@ output_dir=${2:-"$repo_dir/.build/vendor-tools/$architecture"}
 download_dir="$repo_dir/.build/tool-downloads/$architecture"
 extract_dir="$repo_dir/.build/tool-extract/$architecture"
 
-yt_dlp_version="2026.07.04"
+yt_dlp_version="2026.08.19"
 imageio_version="0.6.0"
-yt_dlp_sha256="498bd0dae17855c599d371d68ec5bafc439a9d8640e838be25c765a9792f261b"
+yt_dlp_sha256="0f192b7ec147ab6288885d6351d9ab67367640029b4377576ef46dd79cf7b202"
 yt_dlp_license_sha256="7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c"
-yt_dlp_third_party_sha256="b085c65586a953cdb4b13c6390d63ec984d66912e4b6a19e66ba3582f2ed104b"
+yt_dlp_third_party_sha256="472aefe951c7db35e1657c1d13fd337140511ed6f2b329205105ad441c5a02b7"
 ffmpeg_gpl_sha256="8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
 
 case "$architecture" in
@@ -102,8 +102,8 @@ fi
 license_source=$(find "$extract_dir" -path '*imageio_ffmpeg-*.dist-info/LICENSE' -print -quit)
 cp "$license_source" "$output_dir/imageio-ffmpeg-LICENSE.txt"
 
-yt_dlp_license="$download_dir/yt-dlp-LICENSE.txt"
-yt_dlp_third_party="$download_dir/yt-dlp-THIRD_PARTY_LICENSES.txt"
+yt_dlp_license="$download_dir/yt-dlp-$yt_dlp_version-LICENSE.txt"
+yt_dlp_third_party="$download_dir/yt-dlp-$yt_dlp_version-THIRD_PARTY_LICENSES.txt"
 ffmpeg_gpl="$download_dir/FFmpeg-COPYING.GPLv2.txt"
 
 if [[ ! -f "$yt_dlp_license" ]]; then

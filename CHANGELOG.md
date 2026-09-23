@@ -2,6 +2,20 @@
 
 All notable changes to Media Downloader are documented here.
 
+## 1.2.2 - 2026-09-23
+
+### Added
+
+- Add a Japanese/English update check in Settings > About. It compares the
+  installed app version with published GitHub releases and opens the latest
+  release page for manual download.
+
+### Changed
+
+- Update the bundled yt-dlp executable and its third-party notices to
+  2026.08.19.
+- Refresh both first-launch manuals for the new app version.
+
 ## 1.2.1 - 2026-08-05
 
 ### Added

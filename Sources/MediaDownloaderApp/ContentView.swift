@@ -533,6 +533,7 @@ private struct DownloadView: View {
 private struct SettingsView: View {
     @ObservedObject var model: AppModel
     @ObservedObject var settings: AppSettings
+    @StateObject private var releaseChecker = AppReleaseChecker()
 
     private var language: AppLanguage { settings.language }
 
@@ -634,6 +635,7 @@ private struct SettingsView: View {
                             Text("Powered by yt-dlp and FFmpeg")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            updateSection
                         }
                         Spacer()
                         Image(systemName: "arrow.down.circle.fill")
@@ -656,6 +658,47 @@ private struct SettingsView: View {
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var updateSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Button {
+                releaseChecker.check(installedVersion: appVersion)
+            } label: {
+                Label(language.text(.checkForUpdates), systemImage: "arrow.clockwise")
+            }
+            .disabled(releaseChecker.state == .checking)
+
+            switch releaseChecker.state {
+            case .idle:
+                EmptyView()
+            case .checking:
+                Text(language.text(.checkingForUpdates))
+                    .foregroundStyle(.secondary)
+            case .current(let release):
+                Text("\(language.text(.upToDate)) · \(language.text(.latestVersion)) \(release.version)")
+                    .foregroundStyle(.green)
+            case .updateAvailable(let release):
+                Text("\(language.text(.updateAvailable)) · \(release.version)")
+                    .foregroundStyle(.orange)
+            case .failed:
+                Text(language.text(.updateCheckFailed))
+                    .foregroundStyle(.orange)
+            }
+
+            Link(destination: latestReleaseURL) {
+                Label(language.text(.openLatestRelease), systemImage: "arrow.up.right.square")
+            }
+        }
+        .font(.caption)
+        .padding(.top, 8)
+    }
+
+    private var latestReleaseURL: URL {
+        switch releaseChecker.state {
+        case .current(let release), .updateAvailable(let release): release.url
+        default: AppReleaseChecker.releasesURL
+        }
     }
 
     private func settingToggle(title: String, help: String, isOn: Binding<Bool>) -> some View {
@@ -702,7 +745,7 @@ private struct SettingsView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.1"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.2"
     }
 
     private var architectureName: String {

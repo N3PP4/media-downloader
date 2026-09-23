@@ -25,17 +25,21 @@ to the original `bin/ytd` terminal tool.
 
 ## Install the trial release
 
-Download version 1.2.1 from the
-[GitHub Releases page](https://github.com/N3PP4/media-downloader/releases/tag/v1.2.1),
+Download the latest version from the
+[GitHub Releases page](https://github.com/N3PP4/media-downloader/releases),
 then choose the package that matches the Mac:
 
 ```text
-dist/Media-Downloader-1.2.1-Apple-Silicon.dmg
-dist/Media-Downloader-1.2.1-Intel.dmg
+dist/Media-Downloader-1.2.2-Apple-Silicon.dmg
+dist/Media-Downloader-1.2.2-Intel.dmg
 ```
 
-Open the DMG, then drag Media Downloader into Applications. Version 1.2.1
-supports macOS Monterey 12 or later.
+Open the DMG and read the Japanese or English PDF in the included `Manuals`
+folder, then drag Media Downloader into Applications. The guide explains the
+first-launch Gatekeeper warning and the safe `Privacy & Security` procedure.
+Version 1.2.2 supports macOS Monterey 12 or later. In Settings > About,
+"Check for updates" compares the installed version with published GitHub
+releases and opens the latest release page for downloading a newer DMG.
 
 - Choose **Apple Silicon** when About This Mac shows a Chip such as M1, M2,
   M3, M4, or later.
@@ -43,7 +47,8 @@ supports macOS Monterey 12 or later.
 
 This trial release is ad-hoc signed for testing, not notarized with an
 Apple Developer ID. Gatekeeper can warn when this build is transferred to a
-different Mac. Complete the Developer ID signing and notarization checklist in
+different Mac. The bundled manuals explain how to allow only Media Downloader
+to open. Complete the Developer ID signing and notarization checklist in
 [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) before publishing it broadly.
 
 ## Use

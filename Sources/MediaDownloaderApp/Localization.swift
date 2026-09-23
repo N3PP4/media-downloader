@@ -73,6 +73,8 @@ enum AppTextKey: String {
     case playlistConfirmTitle, playlistCountUnknown, playlistTimeWarning
     case formatInspectionFailedTitle, formatInspectionFailedBody
     case supportedOS, supportedCPU, developer, orLater, unknownCPU
+    case checkForUpdates, checkingForUpdates, latestVersion, updateAvailable, upToDate
+    case updateCheckFailed, openLatestRelease
 }
 
 private enum AppText {
@@ -157,7 +159,14 @@ private enum AppText {
         .supportedCPU: "対応CPU",
         .developer: "開発者",
         .orLater: "以降",
-        .unknownCPU: "不明"
+        .unknownCPU: "不明",
+        .checkForUpdates: "最新版を確認",
+        .checkingForUpdates: "GitHubで最新版を確認中…",
+        .latestVersion: "公開中の最新版",
+        .updateAvailable: "新しいバージョンを利用できます",
+        .upToDate: "最新版を使用しています",
+        .updateCheckFailed: "最新版を確認できませんでした。時間をおいて再度お試しください。",
+        .openLatestRelease: "GitHubで最新版をダウンロード"
     ]
 
     static let english: [AppTextKey: String] = [
@@ -241,6 +250,13 @@ private enum AppText {
         .supportedCPU: "Supported CPU",
         .developer: "Developer",
         .orLater: "or later",
-        .unknownCPU: "Unknown"
+        .unknownCPU: "Unknown",
+        .checkForUpdates: "Check for updates",
+        .checkingForUpdates: "Checking GitHub for the latest version…",
+        .latestVersion: "Latest available version",
+        .updateAvailable: "A newer version is available",
+        .upToDate: "You're using the latest version",
+        .updateCheckFailed: "Could not check for updates. Try again later.",
+        .openLatestRelease: "Download the latest version on GitHub"
     ]
 }

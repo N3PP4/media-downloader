@@ -7,10 +7,10 @@ the following separately distributed command-line programs in
 ## yt-dlp
 
 - Project: <https://github.com/yt-dlp/yt-dlp>
-- Bundled version: 2026.07.04
+- Bundled version: 2026.08.19
 - License: The Unlicense, with bundled components under their respective ISC,
   MIT, and other licenses.
-- Source and complete notices: <https://github.com/yt-dlp/yt-dlp/tree/2026.07.04>
+- Source and complete notices: <https://github.com/yt-dlp/yt-dlp/tree/2026.08.19>
 
 The corresponding Unlicense text and the official
 `THIRD_PARTY_LICENSES.txt` from this release are included in the app at
