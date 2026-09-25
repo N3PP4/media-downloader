@@ -33,9 +33,11 @@ final class AppModel: ObservableObject {
     @Published private(set) var isInspectingFormats = false
     @Published private(set) var isInspectingPlaylist = false
     @Published private(set) var formatInspectionFailed = false
+    @Published private(set) var formatInspectionNeedsYouTubeVerification = false
     @Published private(set) var isConverting = false
     @Published private(set) var successfulItemCount = 0
     @Published private(set) var failedItemCount = 0
+    @Published private(set) var requiresYouTubeVerification = false
 
     let settings: AppSettings
     private let runner = DownloadRunner()
@@ -55,6 +57,7 @@ final class AppModel: ObservableObject {
     private var sawUnindexedDownloadFailure = false
     private var conversionFailureCount = 0
     private var activeExpectedCount: Int?
+    private var browserForNextDownload: BrowserCookieSource?
 
     init(settings: AppSettings) {
         self.settings = settings
@@ -137,6 +140,7 @@ final class AppModel: ObservableObject {
         playlistInspector.cancel()
         formatAvailability = nil
         formatInspectionFailed = false
+        formatInspectionNeedsYouTubeVerification = false
         playlistAvailability = nil
         isInspectingFormats = false
         isInspectingPlaylist = false
@@ -165,6 +169,7 @@ final class AppModel: ObservableObject {
         isInspectingFormats = false
         isInspectingPlaylist = false
         errorMessage = ""
+        requiresYouTubeVerification = false
         outputURLs = []
         currentTitle = ""
         logLines = []
@@ -214,6 +219,8 @@ final class AppModel: ObservableObject {
         }
 
         let needsConversion = selectedRequiresConversion
+        let selectedBrowser = browserForNextDownload
+        browserForNextDownload = nil
         let request = DownloadRequest(
             url: url,
             destinationDirectory: settings.destinationURL,
@@ -221,7 +228,8 @@ final class AppModel: ObservableObject {
             videoQuality: settings.videoQuality,
             mp3Quality: settings.mp3Quality,
             allowPlaylist: settings.allowPlaylist,
-            convertForQuickTime: needsConversion
+            convertForQuickTime: needsConversion,
+            browserCookies: selectedBrowser
         )
         let arguments = CommandBuilder.arguments(for: request, ffmpegURL: ffmpeg)
         let environment = toolEnvironment(ytDLP: ytDLP, ffmpeg: ffmpeg)
@@ -254,6 +262,14 @@ final class AppModel: ObservableObject {
         }
     }
 
+    func retryWithBrowser(_ browser: BrowserCookieSource) {
+        guard phase == .failed, requiresYouTubeVerification,
+              case .success(let url) = URLValidator.validate(urlText),
+              YouTubeAccess.isYouTubeURL(url) else { return }
+        browserForNextDownload = browser
+        startDownload()
+    }
+
     func cancelDownload() {
         guard isRunning else { return }
         statusMessage = settings.language.text(.cancelled)
@@ -270,10 +286,13 @@ final class AppModel: ObservableObject {
         currentTitle = ""
         statusMessage = settings.language.text(.statusReady)
         errorMessage = ""
+        requiresYouTubeVerification = false
+        browserForNextDownload = nil
         outputURLs = []
         logLines = []
         formatAvailability = nil
         formatInspectionFailed = false
+        formatInspectionNeedsYouTubeVerification = false
         playlistAvailability = nil
         isInspectingFormats = false
         isInspectingPlaylist = false
@@ -314,6 +333,7 @@ final class AppModel: ObservableObject {
     func configurePreview(formatAvailability: FormatAvailability?, inspectionFailed: Bool) {
         self.formatAvailability = formatAvailability
         formatInspectionFailed = inspectionFailed
+        formatInspectionNeedsYouTubeVerification = false
     }
 
     private func handle(_ event: DownloadOutputEvent) {
@@ -383,9 +403,17 @@ final class AppModel: ObservableObject {
             phase = .failed
             statusMessage = settings.language.text(.failed)
             let usefulError = recentLines.last(where: { $0.hasPrefix("ERROR:") })
-            errorMessage = usefulError?.replacingOccurrences(of: "ERROR:", with: "")
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                ?? settings.language.text(.genericFailure)
+            if let usefulError,
+               case .success(let url) = URLValidator.validate(urlText),
+               YouTubeAccess.isYouTubeURL(url),
+               YouTubeAccess.needsBrowserVerification(usefulError) {
+                requiresYouTubeVerification = true
+                errorMessage = settings.language.text(.youtubeVerificationHelp)
+            } else {
+                errorMessage = usefulError?.replacingOccurrences(of: "ERROR:", with: "")
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    ?? settings.language.text(.genericFailure)
+            }
             return
         }
 
@@ -429,6 +457,7 @@ final class AppModel: ObservableObject {
             try formatInspector.inspect(
                 url: url,
                 executableURL: ytDLP,
+                browserCookies: nil,
                 environment: toolEnvironment(ytDLP: ytDLP, ffmpeg: toolLocations.ffmpeg),
                 completion: { [weak self] result in
                     guard let self,
@@ -438,18 +467,24 @@ final class AppModel: ObservableObject {
                     if case .success(let availability) = result {
                         self.formatAvailability = availability
                         self.formatInspectionFailed = false
+                        self.formatInspectionNeedsYouTubeVerification = false
                         if !self.settings.allowPlaylist,
                            !availability.selectableQualities.contains(self.settings.videoQuality) {
                             self.settings.videoQuality = .best
                         }
                     } else {
                         self.formatInspectionFailed = true
+                        if case .failure(let error) = result {
+                            self.formatInspectionNeedsYouTubeVerification = YouTubeAccess.isYouTubeURL(url)
+                                && YouTubeAccess.needsBrowserVerification(error.localizedDescription)
+                        }
                     }
                 }
             )
         } catch {
             isInspectingFormats = false
             formatInspectionFailed = true
+            formatInspectionNeedsYouTubeVerification = false
         }
     }
 
@@ -465,6 +500,7 @@ final class AppModel: ObservableObject {
             try playlistInspector.inspect(
                 url: url,
                 executableURL: ytDLP,
+                browserCookies: nil,
                 environment: toolEnvironment(ytDLP: ytDLP, ffmpeg: toolLocations.ffmpeg),
                 completion: { [weak self] result in
                     guard let self,

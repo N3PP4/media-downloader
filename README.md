@@ -61,6 +61,18 @@ to open. Complete the Developer ID signing and notarization checklist in
 Use only media you are authorized to download. Website terms and copyright
 rules still apply.
 
+### When YouTube asks you to sign in
+
+`Sign in to confirm you're not a bot` is a verification response from YouTube,
+not a resolution or conversion error. First check that the video plays in a
+browser where you are signed in. If the app displays this error, you can choose
+**Retry with a signed-in browser** and select Chrome, Safari, or Firefox. This
+is a one-time, opt-in retry: normal downloads do not read browser cookies, and
+the app does not save them. yt-dlp reads cookies from the selected browser;
+using a YouTube account may carry account risk and does not guarantee success.
+Do not send cookie files, browser profiles, or detailed authentication logs to
+others. See the [yt-dlp cookie guidance](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies).
+
 ## Develop
 
 Requirements:

@@ -2,6 +2,19 @@
 
 All notable changes to Media Downloader are documented here.
 
+## 1.2.3 - candidate
+
+### Added
+
+- Explain YouTube sign-in verification failures in Japanese and English.
+- Offer a one-time, opt-in retry with a selected signed-in browser when YouTube
+  requires verification. Normal downloads never read browser cookies.
+
+### Changed
+
+- Distinguish YouTube verification failures from ordinary quality inspection
+  failures, without implying that changing resolution will fix authentication.
+
 ## 1.2.2 - 2026-09-23
 
 ### Added

@@ -83,6 +83,7 @@ private struct DownloadView: View {
     @ObservedObject var settings: AppSettings
     @State private var isLogExpanded = false
     @State private var downloadConfirmation: DownloadConfirmation?
+    @State private var showBrowserRetryChoice = false
 
     private var language: AppLanguage { settings.language }
 
@@ -99,6 +100,18 @@ private struct DownloadView: View {
                 }
             }
             .padding(8)
+        }
+        .confirmationDialog(
+            language.text(.browserRetryTitle),
+            isPresented: $showBrowserRetryChoice,
+            titleVisibility: .visible
+        ) {
+            ForEach(BrowserCookieSource.allCases) { browser in
+                Button(browser.displayName) { model.retryWithBrowser(browser) }
+            }
+            Button(language.text(.cancel), role: .cancel) {}
+        } message: {
+            Text(language.text(.browserRetryDisclosure))
         }
     }
 
@@ -285,6 +298,11 @@ private struct DownloadView: View {
                 title: language.text(.failed),
                 message: model.errorMessage
             ) {
+                if model.requiresYouTubeVerification {
+                    Button(language.text(.retryWithBrowser)) {
+                        showBrowserRetryChoice = true
+                    }
+                }
                 Button(language.text(.downloadAnother), action: model.resetForAnotherDownload)
                     .buttonStyle(.borderedProminent)
             }
@@ -392,10 +410,11 @@ private struct DownloadView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(language.text(.formatInspectionFailedTitle))
                         .font(.caption.weight(.semibold))
-                    Text(language.text(.formatInspectionFailedBody))
+                    Text(language.text(model.formatInspectionNeedsYouTubeVerification
+                        ? .formatInspectionVerificationBody : .formatInspectionFailedBody))
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    if model.selectedRequiresConversion {
+                    if model.selectedRequiresConversion && !model.formatInspectionNeedsYouTubeVerification {
                         Divider().padding(.vertical, 2)
                         Text(language.text(.conversionNoticeTitle))
                             .font(.caption.weight(.semibold))
@@ -408,7 +427,7 @@ private struct DownloadView: View {
             }
             .padding(10)
             .background(Color.orange.opacity(0.10), in: RoundedRectangle(cornerRadius: 8))
-        } else if model.selectedRequiresConversion {
+        } else if model.selectedRequiresConversion && !model.formatInspectionNeedsYouTubeVerification {
             HStack(alignment: .top, spacing: 10) {
                 Image(systemName: "clock.badge.exclamationmark.fill")
                     .foregroundStyle(.orange)
@@ -447,7 +466,7 @@ private struct DownloadView: View {
         guard !model.isInspectingMedia else { return }
         if model.shouldConfirmPlaylist {
             downloadConfirmation = .playlist
-        } else if model.selectedRequiresConversion {
+        } else if model.selectedRequiresConversion && !model.formatInspectionNeedsYouTubeVerification {
             downloadConfirmation = .conversion
         } else {
             model.startDownload()
@@ -745,7 +764,7 @@ private struct SettingsView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.2"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.2.3"
     }
 
     private var architectureName: String {

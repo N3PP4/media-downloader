@@ -72,9 +72,11 @@ enum AppTextKey: String {
     case convertingForQuickTime, conversionFailed, fastWithoutConversion
     case playlistConfirmTitle, playlistCountUnknown, playlistTimeWarning
     case formatInspectionFailedTitle, formatInspectionFailedBody
+    case formatInspectionVerificationBody
     case supportedOS, supportedCPU, developer, orLater, unknownCPU
     case checkForUpdates, checkingForUpdates, latestVersion, updateAvailable, upToDate
     case updateCheckFailed, openLatestRelease
+    case youtubeVerificationHelp, retryWithBrowser, browserRetryTitle, browserRetryDisclosure
 }
 
 private enum AppText {
@@ -155,6 +157,7 @@ private enum AppText {
         .playlistTimeWarning: "動画数や選択画質によって、長い処理時間と大きな保存容量が必要になる場合があります。",
         .formatInspectionFailedTitle: "利用可能な画質を確認できませんでした",
         .formatInspectionFailedBody: "画質はすべて選択できます。選択した画質がない場合は、実際に利用できる範囲で保存されます。",
+        .formatInspectionVerificationBody: "YouTubeがログイン確認を求めています。ダウンロードも失敗する可能性があります。その場合はログイン済みブラウザで再試行してください。",
         .supportedOS: "対応OS",
         .supportedCPU: "対応CPU",
         .developer: "開発者",
@@ -166,7 +169,11 @@ private enum AppText {
         .updateAvailable: "新しいバージョンを利用できます",
         .upToDate: "最新版を使用しています",
         .updateCheckFailed: "最新版を確認できませんでした。時間をおいて再度お試しください。",
-        .openLatestRelease: "GitHubで最新版をダウンロード"
+        .openLatestRelease: "GitHubで最新版をダウンロード",
+        .youtubeVerificationHelp: "YouTubeがログイン確認を求めています。ブラウザでこの動画を開いて再生できるか確認してください。ログイン済みの場合は、下のボタンからブラウザを選んで再試行できます。成功は保証されず、アカウントに影響する可能性があります。",
+        .retryWithBrowser: "ログイン済みブラウザで再試行…",
+        .browserRetryTitle: "使用するブラウザを選択",
+        .browserRetryDisclosure: "選んだブラウザに保存されたCookieをyt-dlpが読み取ります。アプリはCookieを保存しません。YouTubeのログイン状態でこの動画を一度だけ再試行します。利用はご自身の判断で行ってください。"
     ]
 
     static let english: [AppTextKey: String] = [
@@ -246,6 +253,7 @@ private enum AppText {
         .playlistTimeWarning: "The number of videos and selected quality may require substantial processing time and storage.",
         .formatInspectionFailedTitle: "Available qualities could not be checked",
         .formatInspectionFailedBody: "All quality choices remain available. If the selected quality is unavailable, the best available quality within that limit will be saved.",
+        .formatInspectionVerificationBody: "YouTube is requesting sign-in verification. The download may also fail. If it does, retry with a signed-in browser.",
         .supportedOS: "Supported OS",
         .supportedCPU: "Supported CPU",
         .developer: "Developer",
@@ -257,6 +265,10 @@ private enum AppText {
         .updateAvailable: "A newer version is available",
         .upToDate: "You're using the latest version",
         .updateCheckFailed: "Could not check for updates. Try again later.",
-        .openLatestRelease: "Download the latest version on GitHub"
+        .openLatestRelease: "Download the latest version on GitHub",
+        .youtubeVerificationHelp: "YouTube is asking you to sign in for verification. Check whether this video plays in your browser. If you are signed in, you can choose a browser below and retry. Success is not guaranteed, and your account may be affected.",
+        .retryWithBrowser: "Retry with a signed-in browser…",
+        .browserRetryTitle: "Choose a browser",
+        .browserRetryDisclosure: "yt-dlp will read cookies saved by the selected browser. This app does not store them. The app will retry this YouTube video once with your browser sign-in. Use at your own discretion."
     ]
 }

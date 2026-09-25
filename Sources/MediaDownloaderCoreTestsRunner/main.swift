@@ -141,6 +141,31 @@ suite.expect(mp3Arguments.contains("-x"), "MP3 should extract audio")
 suite.expect(mp3Arguments[mp3Arguments.firstIndex(of: "--audio-format")! + 1] == "mp3", "MP3 format should be selected")
 suite.expect(mp3Arguments[mp3Arguments.firstIndex(of: "--audio-quality")! + 1] == "2", "High MP3 quality should use VBR 2")
 
+let youtubeSource = URL(string: "https://youtu.be/DZvu6SqzeOw")!
+let browserRequest = DownloadRequest(
+    url: youtubeSource,
+    destinationDirectory: destination,
+    kind: .video,
+    browserCookies: .chrome
+)
+let browserArguments = CommandBuilder.arguments(for: browserRequest, ffmpegURL: ffmpeg)
+suite.expect(browserArguments.contains("--cookies-from-browser"), "Explicit YouTube browser retry should enable cookies")
+suite.expect(browserArguments[browserArguments.firstIndex(of: "--cookies-from-browser")! + 1] == "chrome", "The selected browser should be used")
+suite.expect(!videoArguments.contains("--cookies-from-browser"), "Normal downloads must never read browser cookies")
+let otherSiteRequest = DownloadRequest(
+    url: source,
+    destinationDirectory: destination,
+    kind: .video,
+    browserCookies: .chrome
+)
+suite.expect(!CommandBuilder.arguments(for: otherSiteRequest, ffmpegURL: ffmpeg).contains("--cookies-from-browser"), "Browser cookies must not be used for non-YouTube URLs")
+suite.expect(YouTubeAccess.isYouTubeURL(youtubeSource), "youtu.be should be recognized")
+suite.expect(YouTubeAccess.isYouTubeURL(URL(string: "https://www.youtube.com/watch?v=abc")!), "YouTube subdomains should be recognized")
+suite.expect(!YouTubeAccess.isYouTubeURL(URL(string: "https://youtube.com.evil.example/watch")!), "Lookalike domains must not be recognized")
+suite.expect(YouTubeAccess.needsBrowserVerification("ERROR: Sign in to confirm you're not a bot"), "YouTube bot checks should be identified")
+suite.expect(YouTubeAccess.needsBrowserVerification("Sign in to confirm you’re not a bot"), "Typographic apostrophes should be recognized")
+suite.expect(!YouTubeAccess.needsBrowserVerification("ERROR: HTTP Error 403: Forbidden"), "Unrelated failures should not be identified as sign-in checks")
+
 suite.expect(
     OutputParser.parse(line: "[download]  42.5% of 10.00MiB at 2.00MiB/s ETA 00:02") == .progress(0.425),
     "Progress should be parsed"
