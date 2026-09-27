@@ -39,6 +39,10 @@ for architecture in $architectures; do
         "$repo_dir/.build/ui-settings-en-dark-$architecture.png"
     "$build_dir/MediaDownloaderUISnapshot" --conversion --maximum-height=2160 \
         "$repo_dir/.build/ui-quality-4k-$architecture.png"
+    "$build_dir/MediaDownloaderUISnapshot" --conversion --maximum-height=4320 \
+        "$repo_dir/.build/ui-quality-8k-ja-$architecture.png"
+    "$build_dir/MediaDownloaderUISnapshot" --conversion --maximum-height=8640 --dark --english \
+        "$repo_dir/.build/ui-quality-8640p-en-$architecture.png"
     "$build_dir/MediaDownloaderUISnapshot" --inspection-failure --dark \
         "$repo_dir/.build/ui-inspection-failure-$architecture.png"
 done

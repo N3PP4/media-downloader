@@ -11,6 +11,7 @@ final class PlaylistInspector {
     func inspect(
         url: URL,
         executableURL: URL,
+        browserCookies: BrowserCookieSource? = nil,
         environment: [String: String],
         completion: @escaping (Result<PlaylistAvailability, Error>) -> Void
     ) throws {
@@ -32,9 +33,9 @@ final class PlaylistInspector {
             "--skip-download",
             "--flat-playlist",
             "--yes-playlist",
-            "--dump-single-json",
-            url.absoluteString
-        ]
+            "--dump-single-json"
+        ] + YouTubeAccess.browserCookieArguments(for: url, browser: browserCookies)
+            + [url.absoluteString]
         process.environment = environment
         process.standardOutput = stdoutPipe
         process.standardError = stderrPipe

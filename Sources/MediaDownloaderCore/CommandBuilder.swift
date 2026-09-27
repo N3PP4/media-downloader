@@ -20,6 +20,11 @@ public enum CommandBuilder {
             arguments.append("--no-playlist")
         }
 
+        arguments.append(contentsOf: YouTubeAccess.browserCookieArguments(
+            for: request.url,
+            browser: request.browserCookies
+        ))
+
         if let ffmpegURL {
             arguments.append(contentsOf: ["--ffmpeg-location", ffmpegURL.path])
         }

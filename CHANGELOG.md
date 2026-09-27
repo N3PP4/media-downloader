@@ -2,6 +2,24 @@
 
 All notable changes to Media Downloader are documented here.
 
+## 1.2.3 - 2026-09-27
+
+### Added
+
+- Explain YouTube sign-in verification failures in Japanese and English.
+- Offer a one-time, opt-in retry with a selected signed-in browser when YouTube
+  requires verification. Normal downloads never read browser cookies.
+
+### Changed
+
+- Correct the best-quality, resolution notice, and confirmation labels for 8K
+  and higher sources. 4320p is labelled 8K; other nonstandard resolutions retain
+  their actual numeric value rather than being rounded down to 4K.
+- Keep maximum-quality downloads uncapped; actual availability and conversion
+  support still depend on the source and the Mac.
+- Distinguish YouTube verification failures from ordinary quality inspection
+  failures, without implying that changing resolution will fix authentication.
+
 ## 1.2.2 - 2026-09-23
 
 ### Added

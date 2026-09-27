@@ -57,6 +57,7 @@ public struct DownloadRequest: Equatable, Sendable {
     public var mp3Quality: MP3Quality
     public var allowPlaylist: Bool
     public var convertForQuickTime: Bool
+    public var browserCookies: BrowserCookieSource?
 
     public init(
         url: URL,
@@ -65,7 +66,8 @@ public struct DownloadRequest: Equatable, Sendable {
         videoQuality: VideoQuality = .best,
         mp3Quality: MP3Quality = .best,
         allowPlaylist: Bool = false,
-        convertForQuickTime: Bool = false
+        convertForQuickTime: Bool = false,
+        browserCookies: BrowserCookieSource? = nil
     ) {
         self.url = url
         self.destinationDirectory = destinationDirectory
@@ -74,6 +76,7 @@ public struct DownloadRequest: Equatable, Sendable {
         self.mp3Quality = mp3Quality
         self.allowPlaylist = allowPlaylist
         self.convertForQuickTime = convertForQuickTime
+        self.browserCookies = browserCookies
     }
 }
 

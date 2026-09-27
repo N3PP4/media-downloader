@@ -11,6 +11,7 @@ final class FormatInspector {
     func inspect(
         url: URL,
         executableURL: URL,
+        browserCookies: BrowserCookieSource? = nil,
         environment: [String: String],
         completion: @escaping (Result<FormatAvailability, Error>) -> Void
     ) throws {
@@ -31,9 +32,9 @@ final class FormatInspector {
             "--no-update",
             "--skip-download",
             "--no-playlist",
-            "--dump-single-json",
-            url.absoluteString
-        ]
+            "--dump-single-json"
+        ] + YouTubeAccess.browserCookieArguments(for: url, browser: browserCookies)
+            + [url.absoluteString]
         process.environment = environment
         process.standardOutput = stdoutPipe
         process.standardError = stderrPipe

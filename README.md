@@ -30,14 +30,14 @@ Download the latest version from the
 then choose the package that matches the Mac:
 
 ```text
-dist/Media-Downloader-1.2.2-Apple-Silicon.dmg
-dist/Media-Downloader-1.2.2-Intel.dmg
+dist/Media-Downloader-1.2.3-Apple-Silicon.dmg
+dist/Media-Downloader-1.2.3-Intel.dmg
 ```
 
 Open the DMG and read the Japanese or English PDF in the included `Manuals`
 folder, then drag Media Downloader into Applications. The guide explains the
 first-launch Gatekeeper warning and the safe `Privacy & Security` procedure.
-Version 1.2.2 supports macOS Monterey 12 or later. In Settings > About,
+Version 1.2.3 supports macOS Monterey 12 or later. In Settings > About,
 "Check for updates" compares the installed version with published GitHub
 releases and opens the latest release page for downloading a newer DMG.
 
@@ -60,6 +60,24 @@ to open. Complete the Developer ID signing and notarization checklist in
 
 Use only media you are authorized to download. Website terms and copyright
 rules still apply.
+
+Best quality is not capped at 4K. When detected, 4320p is shown as 8K and other
+higher resolutions use their numeric label (for example, 5760p or 8640p).
+Availability and successful conversion depend on the source and the Mac; this
+does not guarantee that every Mac can convert every resolution. The included
+v1.2.2 first-launch PDF guides remain applicable to this release.
+
+### When YouTube asks you to sign in
+
+`Sign in to confirm you're not a bot` is a verification response from YouTube,
+not a resolution or conversion error. First check that the video plays in a
+browser where you are signed in. If the app displays this error, you can choose
+**Retry with a signed-in browser** and select Chrome, Safari, or Firefox. This
+is a one-time, opt-in retry: normal downloads do not read browser cookies, and
+the app does not save them. yt-dlp reads cookies from the selected browser;
+using a YouTube account may carry account risk and does not guarantee success.
+Do not send cookie files, browser profiles, or detailed authentication logs to
+others. See the [yt-dlp cookie guidance](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies).
 
 ## Develop
 

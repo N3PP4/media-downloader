@@ -9,6 +9,10 @@ struct MediaDownloaderAppIntegrationRunner {
         let arguments = Array(CommandLine.arguments.dropFirst())
         if arguments == ["--check-quality-labels"] {
             let checks = [
+                AppIntegrationHarness.bestQualityLabel(maximumHeight: 4320, japanese: true) == "最高画質（8K）",
+                AppIntegrationHarness.bestQualityLabel(maximumHeight: 4320, japanese: false) == "Best quality (8K)",
+                AppIntegrationHarness.bestQualityLabel(maximumHeight: 8640, japanese: true) == "最高画質（8640p）",
+                AppIntegrationHarness.bestQualityLabel(maximumHeight: 2880, japanese: false) == "Best quality (2880p)",
                 AppIntegrationHarness.bestQualityLabel(maximumHeight: 2160, japanese: true) == "最高画質（4K）",
                 AppIntegrationHarness.bestQualityLabel(maximumHeight: 1440, japanese: true) == "最高画質（1440p）",
                 AppIntegrationHarness.bestQualityLabel(maximumHeight: 1080, japanese: true) == "最高画質（1080p）",
