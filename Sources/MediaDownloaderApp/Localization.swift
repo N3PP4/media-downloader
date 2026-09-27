@@ -33,14 +33,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
     func bestVideoQualityName(maximumHeight: Int?) -> String {
         guard let maximumHeight else { return text(.qualityBest) }
-        let resolution: String
-        switch maximumHeight {
-        case 2160...: resolution = "4K"
-        case 1440..<2160: resolution = "1440p"
-        case 1080..<1440: resolution = "1080p"
-        case 720..<1080: resolution = "720p"
-        default: resolution = "\(maximumHeight)p"
-        }
+        let resolution = ResolutionLabel.name(for: maximumHeight)
         switch self {
         case .japanese: return "最高画質（\(resolution)）"
         case .english: return "Best quality (\(resolution))"

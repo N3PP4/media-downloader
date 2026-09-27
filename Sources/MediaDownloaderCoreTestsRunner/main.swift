@@ -20,6 +20,14 @@ struct TestSuite {
 
 var suite = TestSuite()
 
+for height in [720, 1080, 1440, 2160, 2880, 4320, 5760, 8640] {
+    let expected = height == 2160 ? "4K" : height == 4320 ? "8K" : "\(height)p"
+    suite.expect(ResolutionLabel.name(for: height) == expected, "Resolution labels must preserve \(height)p")
+    let data = "{\"formats\":[{\"height\":\(height),\"vcodec\":\"av01\",\"acodec\":\"none\"}]}".data(using: .utf8)!
+    suite.expect((try? FormatAvailabilityParser.parse(data).sourceMaximumHeight) == height,
+                 "Resolution parsing must not cap \(height)p")
+}
+
 let releaseJSON = """
 [
   {"tag_name":"v1.2.1","draft":false,"prerelease":true},

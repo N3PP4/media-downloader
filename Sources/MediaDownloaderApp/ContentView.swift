@@ -482,7 +482,7 @@ private struct DownloadView: View {
 
     private func confirmationMessage(_ confirmation: DownloadConfirmation) -> String {
         guard confirmation == .playlist else {
-            return language.text(.conversionConfirmMessage)
+            return "\(language.text(.quality)): \(videoQualityName(settings.videoQuality))\n\n\(language.text(.conversionConfirmMessage))"
         }
 
         let count: String
@@ -516,13 +516,7 @@ private struct DownloadView: View {
     }
 
     private func resolutionName(_ height: Int) -> String {
-        switch height {
-        case 2160...: "4K"
-        case 1440..<2160: "1440p"
-        case 1080..<1440: "1080p"
-        case 720..<1080: "720p"
-        default: "\(height)p"
-        }
+        ResolutionLabel.name(for: height)
     }
 
     private func videoQualityName(_ quality: VideoQuality) -> String {
